@@ -1,5 +1,5 @@
 [build]
-  command = "npm install && npm run build"
+  command = "npm install --production=false && npm run build"
   publish = "dist/public"
   functions = "netlify/functions"
 
@@ -7,12 +7,14 @@
   NODE_VERSION = "20"
   NODE_ENV = "production"
   NPM_FLAGS = "--legacy-peer-deps"
+  VITE_API_URL = "/.netlify/functions/api"
 
 # إعدادات إعادة التوجيه للواجهة الأمامية
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  force = true
 
 # إعدادات إعادة التوجيه للـ API
 [[redirects]]
@@ -42,3 +44,5 @@
 [dev]
   command = "npm run dev"
   port = 3000
+  targetPort = 3000
+  publish = "dist/public"
