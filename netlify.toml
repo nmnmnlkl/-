@@ -8,6 +8,8 @@
   NODE_ENV = "production"
   NPM_FLAGS = "--legacy-peer-deps"
   VITE_API_URL = "/.netlify/functions/api"
+  # قم بإضافة مفاتيح API الخاصة بك هنا (مفصولة بفواصل)
+  API_KEYS = "your-secure-api-key-1,your-secure-api-key-2"
 
 # إعدادات إعادة التوجيه للواجهة الأمامية
 [[redirects]]
@@ -27,7 +29,7 @@
   node_bundler = "esbuild"
   external_node_modules = ["@netlify/functions"]
 
-# إعدادات الأمان
+# إعدادات CORS للواجهة الأمامية
 [[headers]]
   for = "/*"
   [headers.values]
@@ -35,11 +37,19 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    
-    # CORS للواجهة الأمامية
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Methods = "GET, POST, OPTIONS"
-    Access-Control-Allow-Headers = "Content-Type, x-api-key"
+    Access-Control-Allow-Headers = "Content-Type, x-api-key, Authorization"
+    Access-Control-Allow-Credentials = "true"
+
+# إعدادات CORS خاصة بالوظائف (Functions)
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, x-api-key, Authorization"
+    Access-Control-Allow-Credentials = "true"
 
 [dev]
   command = "npm run dev"

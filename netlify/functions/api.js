@@ -1,7 +1,13 @@
-const API_KEYS = new Set([
-  'your-secure-api-key-1',
-  'your-secure-api-key-2'
-]);
+// قراءة مفاتيح API من متغير البيئة أو استخدام قيم افتراضية
+const API_KEYS = new Set(
+  (process.env.API_KEYS || 'your-secure-api-key-1,your-secure-api-key-2')
+    .split(',')
+    .map(key => key.trim())
+    .filter(key => key)
+);
+
+// سجل المفاتيح المتاحة للأغراض التشخيصية (يجب إزالة هذا في الإنتاج)
+console.log('API Keys loaded:', Array.from(API_KEYS));
 
 exports.handler = async (event, context) => {
   // التحقق من وجود مفتاح API في الرأس
