@@ -1,0 +1,44 @@
+[build]
+  command = "npm install && npm run build"
+  publish = "dist/public"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NODE_ENV = "production"
+  NPM_FLAGS = "--legacy-peer-deps"
+
+# إعدادات إعادة التوجيه للواجهة الأمامية
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# إعدادات إعادة التوجيه للـ API
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["@netlify/functions"]
+
+# إعدادات الأمان
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # CORS للواجهة الأمامية
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, x-api-key"
+
+[dev]
+  command = "npm run dev"
+  port = 3000
